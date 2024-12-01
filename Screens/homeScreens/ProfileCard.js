@@ -1,12 +1,18 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 
-const ProfileCard = ({ nom, prenom, telephone, uriImage }) => {
+const ProfileCard = ({ nom, prenom, telephone, uriImage,props }) => {
   return (
     <View style={styles.card}>
       <Image source={{ uri: uriImage}} style={styles.photo} />
       <View style={styles.info}>
-        <Text style={styles.name}>{nom} {prenom}</Text>
+        <Text  onPress={() => {
+                props.navigation.navigate('Chat', {
+                  currentid: currentid,
+                  secondid: item.id,
+                });
+              }}
+            style={styles.name}>{nom} {prenom}</Text>
         <Text style={styles.phone}>{telephone}</Text>
       </View>
     </View>

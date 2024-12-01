@@ -11,7 +11,9 @@ const ref_listprofile=database.ref("ListProfile");
 
 export default function ListProfile(props) {
   const [data, setdata] = useState();
+  const currentid = props.route.params.currentid;
   useEffect(() => {
+    //importer les données
     ref_listprofile.on("value",(snapshot)=>{
       var d =[];
       snapshot.forEach((un_profile)=>{

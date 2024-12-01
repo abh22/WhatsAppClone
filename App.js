@@ -14,12 +14,13 @@ export default function App() {
     <NavigationContainer>
       <stack.Navigator screenOptions={{ headerShown: false }}>
         <stack.Screen name="Auth" component={Auth}></stack.Screen>
-        <stack.Screen name="Home" component={Home}></stack.Screen>
         <stack.Screen
           name="NewUser"
           component={NewUser}
           options={{ headerShown: true }}
         ></stack.Screen>
+        <stack.Screen name="Home" component={Home}></stack.Screen>
+        
         <stack.Screen name="Chat" component={Chat}></stack.Screen>
       </stack.Navigator>
     </NavigationContainer>

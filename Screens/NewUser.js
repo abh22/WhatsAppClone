@@ -1,10 +1,30 @@
 import { StatusBar } from "expo-status-bar";
+import React, { useState } from 'react';
 import { ImageBackground, StyleSheet, Text, View } from "react-native";
 import { Button, TextInput } from "react-native";
 import firebase from "../config";
 const auth = firebase.auth();
-export default function Newuser(props) {
-  var email, password, confirmpassword;
+export default function Newuser({navigation,props}) {
+  // const [email, setEmail] = useState();
+  // const [password, setPassword] = useState();
+  // const [confirmPassword, setConfirmPassword] = useState();
+  var email,password,confirmPassword;
+  const [error, setError] = useState('');
+  const handleSubmit = () => {
+    if (password == confirmPassword) {
+      auth
+        .createUserWithEmailAndPassword(email, password)
+        .then(() => {
+          const currentid = auth.currentUser.uid;
+          setError('');
+          navigation.navigate('Home', { currentid: currentid });
+        })
+        .catch((error) => {
+          alert(error);
+        });
+    } else {
+      alert("verifier password");
+    }}
   return (
     <ImageBackground
       source={require("../assets/back.jpg")}
@@ -47,7 +67,7 @@ export default function Newuser(props) {
           placeholder="Confirm password"
           secureTextEntry={true}
           style={styles.textInputStyle}
-          onChangeText={(txt) => (confirmpassword = txt)}
+          onChangeText={(txt) => (confirmPassword = txt)}
         ></TextInput>
         <View
           style={{
@@ -59,24 +79,13 @@ export default function Newuser(props) {
           <Button
             color="#055"
             title="Submit"
-            onPress={() => {
-              if (password == confirmpassword) {
-                auth
-                  .createUserWithEmailAndPassword(email, password)
-                  .then(() => {
-                    props.navigation.replace("Home");
-                  })
-                  .catch((error) => {
-                    alert(error);
-                  });
-              } else {
-                alert("verifier password");
-              }
-            }}
+            onPress={
+              handleSubmit
+            }
           ></Button>
 
           <Button
-            onPress={() => props.navigation.navigate("Auth")}
+            onPress={() => navigation.goBack()}
             color="#055"
             title="Back"
           ></Button>

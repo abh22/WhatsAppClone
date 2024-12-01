@@ -12,7 +12,8 @@ import {
 import firebase from "firebase/compat/app";
 import * as ImagePicker from "expo-image-picker";
 import { supabase } from "../../config";
-export default function MyProfile() {
+export default function MyProfile(props) {
+  const currentid = props.route.params.currentid;
   const [nom, setNom] = useState();
   const [prenom, setPrenom] = useState();
   const [numero, setNumero] = useState();
@@ -47,13 +48,13 @@ export default function MyProfile() {
 
     await supabase.storage
       .from("profileImage")
-      .upload(localImage, arraybuffer, {
+      .upload(currentid, arraybuffer, {
         upsert: true,
       });
 
     const { data} = supabase.storage
       .from("profileImage")
-      .getPublicUrl(localImage);
+      .getPublicUrl(currentid);
     return data.publicUrl;
   };
   return (
@@ -113,7 +114,7 @@ export default function MyProfile() {
           const ref_lesprofiles = db.ref("ListProfile");
           const key = ref_lesprofiles.push().key;
           const ref_unprofil = ref_lesprofiles.child("un_profile" + key);
-          ref_unprofil.set({ nom, prenom, numero, uriImage });
+          ref_unprofil.set({id: currentid, nom, prenom, numero, uriImage });
         }}
         activeOpacity={0.5}
         underlayColor="#DDDDDD"
