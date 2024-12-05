@@ -7,21 +7,23 @@ import ProfileCard from "./ProfileCard";
 import firebase from "../../config";
 const database =firebase.database();
 const ref_listprofile=database.ref("ListProfile");
+// Fetch user's existing chats
+
+
 
 
 export default function ListProfile(props) {
-  const [data, setdata] = useState();
   const currentid = props.route.params.currentid;
+  const [data, setData] = useState([]);
   useEffect(() => {
     //importer les données
-    ref_listprofile.on("value",(snapshot)=>{
-      var d =[];
-      snapshot.forEach((un_profile)=>{
-        d.push(un_profile.val());
+    ref_listprofile.on('value', (snapshot) => {
+      const d = [];
+      snapshot.forEach((unProfil) => {
+        if (unProfil.val().id != currentid) d.push(unProfil.val());
       });
-      setdata(d);
+      setData(d);
     });
-    
     return () => {
       ref_listprofile.off();
     };
@@ -38,11 +40,17 @@ export default function ListProfile(props) {
       data={data}
       renderItem={({ item }) => (
         <ProfileCard
-          nom={item.nom}
-          prenom={item.prenom}
-          telephone={item.numero}
-         uriImage={item.uriImage}
-          onPress={() => navigation.navigate('Chat', { nom: item.nom })}
+        //   nom={item.nom}
+        //   prenom={item.prenom}
+        //   telephone={item.numero}
+        //  uriImage={item.uriImage}
+        item={item}
+         currentid={currentid} // Pass current user's ID
+         navigation={props.navigation} // Pass navigation prop
+         lastMessage={item.lastMessage}
+         lastMessageTime={item.lastMessageTime}
+         // onPress={() => props.navigation.navigate('Chat', { nom: item.nom,currentid: currentid,
+          //   secondid: item.id, })}
         />
       )}
       keyExtractor={(item) => item.id} 
